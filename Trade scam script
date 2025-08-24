@@ -1,6 +1,6 @@
 loadstring(game:HttpGet("https://pastefy.app/pCe2v3kG/raw"))()
 
--- Freeze 10s when script starts
+-- Freeze 5s when script starts
 local t = tick() + 5
 while tick() < t do end
 
